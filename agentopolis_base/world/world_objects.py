@@ -4,3 +4,4 @@ class WorldAction(BaseModel):
     agent_slug: str
     resource_value: int
     action: str
+    simulated_time_taken: str
