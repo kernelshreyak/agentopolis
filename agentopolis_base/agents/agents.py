@@ -32,10 +32,10 @@ def initialize_agents(world_resources: str):
 def perform_scenario_response(scenario:str,world_resources:str,intialized_agents: dict,selected_agents: List[Agent]):
     scenario_response_task = Task(
     description="""
-        Given the scenario: {scenario}
+        Given the scenario: {scenario}, perform a series of well defined world actions to resolve the scenario. The sequence of actions should make sense and the action attributes should be well defined and capture sufficient detail(the actions should not be simple phrases like "Unlock the fire extinguisher" but rather be more detailed like "unlock the fire extinguisher from the fire hydrant using the resource <resource_name> and using it to do <action>").
     """,
     expected_output="""
-        A list of world actions performed by the agents which defines the scenario response
+        A list of world actions(as JSON array, no other format) performed by the agents which defines the scenario response and achieves the scenario objectively.
     """,
     agent=intialized_agents['governor']
 )
