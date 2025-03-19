@@ -1,3 +1,5 @@
 crewai
 dotenv-python
 rq
+sqlalchemy
+psycopg2-binary
