@@ -24,3 +24,9 @@ The project uses the following components:
 The project is organized into the following directories:
 
 * **agentopolis_base**: This directory contains the base code for the project including the agents, the world, and the data models.
+
+
+
+* **scenarios**: This directory contains the scenarios that can be run. Each scenario is a separate directory and contains a description of the scenario, the agents' goals and backstories, and the resources and agents available in the scenario.
+* **world**: This directory contains the code for the world including the resources and the rules of the world. The resources are defined in the `world/resources` directory and the rules of the world are defined in the `world/rules` directory.
+* **agents**: This directory contains the code for the agents including their roles, goals, backstories, and behaviors. The agents are defined in the `agents/agents` directory.
