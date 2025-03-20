@@ -4,13 +4,18 @@ from crewai import Agent, Task, Crew
 from typing import List
 from agentopolis_base.data_models import SessionLocal,ScenarioResponseModel
 from agentopolis_base.world.world_prompt import agentopolis_world_prompt
+from crewai_tools import SerperDevTool
 
 ENABLE_VERBOSE = True
 
+search_tool = SerperDevTool()
 def initialize_agents(world_resources: str):
     agents = dict()
     for agent_slug in agents_dict.keys():
         print(f"Initializing agent: {agent_slug}")
+        agent_tools = []
+        if agent_slug == 'governor':
+            agent_tools = [search_tool]
         agents[agent_slug] = Agent(
             role= agents_dict[agent_slug]["role"],
             goal=agents_dict[agent_slug]["goal"],
@@ -22,6 +27,7 @@ def initialize_agents(world_resources: str):
             verbose=ENABLE_VERBOSE,
             allow_delegation=agents_dict[agent_slug]["allow_delegation"],
             llm=agents_dict[agent_slug]["llm"],
+            tools=agent_tools,
             # max_tokens=100000
         )
 
@@ -33,6 +39,7 @@ def perform_scenario_response(scenario:str,world_resources:str,intialized_agents
     scenario_response_task = Task(
     description="""
         Given the scenario: {scenario}, perform a series of well defined world actions to resolve the scenario. The sequence of actions should make sense and the action attributes should be well defined and capture sufficient detail(the actions should not be simple phrases like "Unlock the fire extinguisher" but rather be more detailed like "unlock the fire extinguisher from the fire hydrant using the resource <resource_name> and using it to do <action>").
+         If agents are physically constrained (like blocked or tied), their behaviour and actions should take that into account and immediate physical constraints must be solved first. All actions performed by the agents should be realistic and make sense in the real world.
     """,
     expected_output="""
         A list of world actions(as JSON array, no other format) performed by the agents which defines the scenario response and achieves the scenario objectively.

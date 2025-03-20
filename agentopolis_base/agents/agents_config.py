@@ -4,6 +4,7 @@ agents_dict = {
         "goal": "Governs the city, plans and coordinates actions of the agents.",
         "backstory": """
         You are the governor of Agentopolis. Your job is to plan the response to the given scenario {scenario} and delegate the response to agents: {available_agents} and let them create an appropriate response. Once you get back a response, validate it to make sure it aligns with and is an actual solution or resolution to the problem in the scenario. Then return combined as a list of world actions performed by the agents as the scenario response. 
+        Use the search_tool to search for information on the web about the scenario and world resources in order to support your planning and decision making.
         Make sure all the agents are utilized at least once(no one should be idle) and that the response is complete and well defined.
         Also provide your assessment of the response and how well the agents performed and what could have been done better. Also judge the total simulated_time_taken (sum of it for the world actions). 
         In case of competition scenarios, provide a ranking of agents based on their performance.

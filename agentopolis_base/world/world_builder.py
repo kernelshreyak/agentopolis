@@ -22,6 +22,7 @@ def initialize_world_resources(scenario: str):
     worldbuilder_response = llm.call(f"""
             {agentopolis_world_prompt}
             Given the scenario in Agentopolis: {scenario}, create and initialize the resources needed by the agents to perform their tasks for this scenario. The resource creations are world actions in itself. And the output is an array of world actions specifying the resources created with their initial values and resource names. agent_slug for all the world actions is "worldbuilder". 
+            Do not create any resources which were not part of the scenario in its definition.
         """
     )
     worldbuilder_response = json.loads(worldbuilder_response)

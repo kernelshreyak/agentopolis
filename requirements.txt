@@ -3,3 +3,4 @@ dotenv-python
 rq
 sqlalchemy
 psycopg2-binary
+'crewai[tools]'

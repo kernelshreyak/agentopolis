@@ -31,7 +31,7 @@ current_world = create_world()
 
 st.markdown("# Agentopolis - A City of Agents")
 st.markdown("A sprawling city of agents with a common goal.")
-st.markdown("### Agents (choose at least one")
+st.markdown("### Agents (choose at least one)")
 chosen_agents = dict()
 for agent in agents_dict.keys():
     if agent == 'governor':
@@ -43,13 +43,14 @@ st.markdown("### Choose from a scenario for the agents to respond to")
 available_scenarios = get_scenarios() 
 scenario_choice = st.selectbox("Choose Scenario",tuple(available_scenarios.keys()))
 chosen_scenario = available_scenarios[scenario_choice]
-scenario = st.text_area("Scenario:",placeholder="Describe the scenario",value=chosen_scenario,height=150)
-
+st.markdown("Scenario sample (copy it to next text area):")
+st.markdown(f"""```{chosen_scenario}```""")
+scenario = st.text_area("Scenario:",placeholder="Describe the scenario",height=150)
 if st.button("Simulate"):
+    if scenario == "":
+        st.error("Scenario cannot be empty")
+        st.stop()
     st.success("Scenario submitted")
-
-    scenario = chosen_scenario
-
     st.info("Initializing world resources")
     world_resources = initialize_world_resources(scenario)
     # print("world_resources:",world_resources)
@@ -64,7 +65,9 @@ if st.button("Simulate"):
         if chosen_agents[agent]:
             agents_selected.append(agents_available[agent])
     st.write([agent.role for agent in agents_selected])
-
+    if len(agents_selected) == 0:
+        st.error("No agents selected. Cannot proceed")
+        st.stop()
     st.info("Performing scenario response")
     response = perform_scenario_response(scenario,world_resources,agents_available,agents_selected)
      # mock response
