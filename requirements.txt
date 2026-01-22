@@ -1,6 +1,7 @@
 crewai
-dotenv-python
+crewai-tools
+python-dotenv
 rq
 sqlalchemy
-psycopg2-binary
-'crewai[tools]'
+streamlit
+pydantic

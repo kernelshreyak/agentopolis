@@ -1,3 +1,8 @@
+import os
+
+# Disable CrewAI telemetry by default to avoid Streamlit thread signal issues.
+os.environ.setdefault("CREWAI_DISABLE_TELEMETRY", "true")
+os.environ.setdefault("OTEL_SDK_DISABLED", "true")
 
 from agentopolis_base.agents.agents_config import agents_dict
 from crewai import Agent, Task, Crew
@@ -71,5 +76,4 @@ def perform_scenario_response(scenario:str,world_resources:str,intialized_agents
     finally:
         # db.commit()
         pass
-
 

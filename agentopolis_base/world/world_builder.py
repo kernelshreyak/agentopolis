@@ -1,10 +1,15 @@
+import os
+import json
+
+# Disable CrewAI telemetry by default to avoid Streamlit thread signal issues.
+os.environ.setdefault("CREWAI_DISABLE_TELEMETRY", "true")
+os.environ.setdefault("OTEL_SDK_DISABLED", "true")
+
 from agentopolis_base.world.world_prompt import agentopolis_world_prompt
 from agentopolis_base.world.world_objects import WorldAction
 from pydantic import BaseModel
 from crewai import LLM
 from dotenv import load_dotenv
-import os
-import json
 
 load_dotenv()
 
@@ -25,7 +30,10 @@ def initialize_world_resources(scenario: str):
             Do not create any resources which were not part of the scenario in its definition.
         """
     )
-    worldbuilder_response = json.loads(worldbuilder_response)
+    if isinstance(worldbuilder_response, str):
+        worldbuilder_response = json.loads(worldbuilder_response)
+    elif hasattr(worldbuilder_response, "model_dump"):
+        worldbuilder_response = worldbuilder_response.model_dump()
     worldbuilder_response_txt = ""
     for resource_creation in worldbuilder_response['resource_creations']:
         worldbuilder_response_txt += "Resource Name: " + resource_creation['resource_name'] + ", Resource Value: " + str(resource_creation['resource_value']) + "\n"
@@ -37,5 +45,8 @@ def transform_scenario_response(scenario_response: str) -> list[WorldAction]:
             Given this output from the scenario response agent: {scenario_response} which contains a JSON portion with a list of world actions, transform it into a list of world actions as per response format. retaining all the information and ignoring any non-JSON text". 
         """
     )
-    transformed_response = json.loads(transformed_response)
+    if isinstance(transformed_response, str):
+        transformed_response = json.loads(transformed_response)
+    elif hasattr(transformed_response, "model_dump"):
+        transformed_response = transformed_response.model_dump()
     return transformed_response

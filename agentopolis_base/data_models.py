@@ -1,5 +1,4 @@
 from sqlalchemy import Column, String,Integer,ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,Mapped,mapped_column
@@ -12,7 +11,8 @@ Base = declarative_base()
 load_dotenv()
 
 # Database Configuration
-DATABASE_URL = os.environ["DATABASE_URL"]
+# Default to a local SQLite database file if DATABASE_URL is not set.
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./agentopolis.db")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -30,7 +30,7 @@ def get_db():
 class WorldModel(Base):
     __tablename__ = "worlds"
 
-    world_id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    world_id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     name = Column(String, nullable=False)
     scenarioresponses: Mapped[list["ScenarioResponseModel"]] = relationship(
         "ScenarioResponseModel",
@@ -42,10 +42,10 @@ class WorldModel(Base):
 class ScenarioResponseModel(Base):
     __tablename__ = "scenario_responses"
 
-    scenario_response_id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    scenario_response_id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     scenario_response_report = Column(String, nullable=False)
     world_id: Mapped[str] = mapped_column(
-        UUID(as_uuid=True),
+        String(36),
         ForeignKey("worlds.world_id", ondelete="CASCADE"),
     )
     world: Mapped[WorldModel] = relationship(
@@ -66,7 +66,7 @@ class WorldActionModel(Base):
 
     __tablename__ = "world_actions"
 
-    worldaction_id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    worldaction_id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     """
     Unique identifier for the world action.
     """
@@ -97,7 +97,7 @@ class WorldActionModel(Base):
     """
 
     scenario_response_id: Mapped[str] = mapped_column(
-        UUID(as_uuid=True),
+        String(36),
         ForeignKey("scenario_responses.scenario_response_id", ondelete="CASCADE"),
     )
     """

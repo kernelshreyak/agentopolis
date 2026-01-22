@@ -21,6 +21,42 @@ The project uses the following components:
 * **SQLAlchemy**: A Python library for interacting with databases. It is used to create the database schema and interact with the database.
 * **Pydantic**: A Python library for creating data models. It is used to define the data models for the agents and the world.
 
+## Run the app
+
+### Prerequisites
+- Python 3.10+
+- An OpenAI API key in `OPENAI_API_KEY`
+
+### Setup
+1) Create a virtualenv and install dependencies:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+2) (Optional) Create a `.env` file:
+```bash
+OPENAI_API_KEY=your_key_here
+# Optional: change DB location
+# DATABASE_URL=sqlite:///./agentopolis.db
+# Optional: disable CrewAI telemetry to avoid Streamlit thread signal warnings
+CREWAI_DISABLE_TELEMETRY=true
+OTEL_SDK_DISABLED=true
+```
+
+3) Initialize the database (SQLite by default):
+```bash
+python migration.py
+```
+
+### Start the Streamlit app
+```bash
+streamlit run app.py
+```
+
+The app will open in your browser. Choose a scenario, select agents, and click **Simulate**.
+
 The project is organized into the following directories:
 
 * **agentopolis_base**: This directory contains the base code for the project including the agents, the world, and the data models.

@@ -3,3 +3,4 @@
 .ropeproject
 **/**/__pycache__/
 custom_scenarios.txt
+*.db
